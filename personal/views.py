@@ -30,15 +30,3 @@ def registration(request):
     return render(request, 'registration.html', {'student_form': student_form,
                                                  'teacher_form': teacher_form,
                                                  'login_form': login_form})
-
-
-# @csrf_exempt
-# @require_http_methods(["POST"])
-# def login_view(request):
-#     form = LoginForm(request.POST)
-#     if form.is_valid():
-#         login(request, form.user)
-#         return HttpResponseRedirect('/stream/')
-
-#     return render(request, 'registration.html', {'student_form': student_form,
-#                                                  'teacher_form': teacher_form})
