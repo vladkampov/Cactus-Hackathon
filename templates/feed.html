@@ -5,7 +5,7 @@
         <div id="feed" class="content">
             <h1>Feed of streams</h1>
             {% for object in objects %}
-            <div id="{{ object.pk }}" class="row">
+            <div id="{{ object.pk }}" data-active={{ object.is_active }} class="row">
                 <div class="col-xs-4">
                     <a href="#"><img src="{{ object.thumbnail.url }}"
                     width="100%" class="img-thumbnail"></a>
