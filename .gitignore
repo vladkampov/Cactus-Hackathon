@@ -96,3 +96,6 @@ static/build_grunt
 static/admin
 static/debug_toolbar/
 static/django_extensions/
+static/css
+static/js
+build/
