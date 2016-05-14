@@ -3,15 +3,15 @@ from django.contrib.auth.models import User
 
 
 TYPE_CHOICES = (
-    ("Teacher", "Teacher"),
-    ("Student", "Student"),
-    ("Stranger", "Stranger")
+    ("teacher", "teacher"),
+    ("student", "student"),
+    ("stranger", "stranger")
 )
 
 
 class Group(models.Model):
     name = models.CharField(max_length=16)
-    teachers = models.ManyToManyField('Profile')
+    teachers = models.ManyToManyField('Profile', blank=True)
 
     class Meta:
         verbose_name = "Group"

@@ -16,45 +16,40 @@ class RegistrationForm(forms.Form):
     student_id = forms.CharField(label="Enter your student card id:", required=False)
     type = forms.CharField(widget=forms.HiddenInput())
 
-    def __init__(self, _type, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.type = _type
+        if 'initial' in kwargs:
+            for item, value in kwargs['initial'].items():
+                self.fields[item].initial = value
         self.setup_helper()
 
     def setup_helper(self):
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Submit'))
-
-        if self.type == "student":
+        self.helper.add_input(Submit('submit', 'Register', css_class="btn-success"))
+        if self.fields['type'].initial == "student" or 'type' in self.data and self.data['type'] == "student":
             self.fields['avatar'].required = True
         else:
             self.fields['student_id'].label = "Enter your teachers id:"
 
     def clean(self):
-        cleaned_data = super().clean()
+        super().clean()
 
         # Check username
-        if Profile.objects.filter(user__username=cleaned_data['username']).exists():
+        if User.objects.filter(username=self.data['username']).exists():
             raise forms.ValidationError("Student with this username already exists")
 
         # Check student info
-        if cleaned_data['type'] == "Student":
-            try:
-                StudentCard.object.get(card_id=cleaned_data['student_id'])
-            except:
+        if self.data['type'] == "student":
+            if not StudentCard.objects.filter(card_id=self.data['student_id']).exists():
                 raise forms.ValidationError("No such student card id in database")
-
-            # Student must have avatar
-            if not cleaned_data['avatar']:
-                raise forms.ValidationError("You should upload avatar")
 
         # Validate passwords
         try:
-            assert cleaned_data['password1'] == cleaned_data['password2']
+            assert self.data['password1'] == self.data['password2']
         except:
             raise forms.ValidationError("Passwords are not equal")
 
-        return cleaned_data
+        return self.data
 
     def save(self):
         user = User.objects.create_user(self.cleaned_data['username'],
@@ -63,7 +58,7 @@ class RegistrationForm(forms.Form):
         student_info = StudentCard.objects.get(card_id=self.cleaned_data['student_id'])
         profile = Profile.objects.create(user=user,
                                          avatar=self.cleaned_data['avatar'],
-                                         type=self.type,
+                                         type=self.cleaned_data['type'],
                                          student_info=student_info)
         return profile
 
@@ -75,7 +70,7 @@ class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', 'Login', css_class="btn-success"))
 
     def clean(self):
         self.user = authenticate(username=self.cleaned_data['username'],
