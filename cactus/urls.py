@@ -23,6 +23,7 @@ import stream.urls
 
 urlpatterns = [
     url(r'^$', 'stream.views.index', name='index'),
+    url(r'^feed/$', 'stream.views.feed', name='feed'),
     url(r'^', include(personal.urls)),
     url(r'^stream/', include(stream.urls)),
     url(r'^admin/', admin.site.urls),
