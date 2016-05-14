@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
@@ -13,6 +14,7 @@ class RegistrationForm(forms.Form):
     password2 = forms.CharField(label="Validate password:", widget=forms.PasswordInput)
     avatar = forms.ImageField(required=False)
     student_id = forms.CharField(label="Enter your student card id:", required=False)
+    type = forms.CharField(widget=forms.HiddenInput())
 
     def __init__(self, _type, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,7 +25,7 @@ class RegistrationForm(forms.Form):
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Submit'))
 
-        if self.type == "Student":
+        if self.type == "student":
             self.fields['avatar'].required = True
         else:
             self.fields['student_id'].label = "Enter your teachers id:"
@@ -64,3 +66,22 @@ class RegistrationForm(forms.Form):
                                          type=self.type,
                                          student_info=student_info)
         return profile
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label="Username:")
+    password = forms.CharField(label="Password:", widget=forms.PasswordInput)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+    def clean(self):
+        self.user = authenticate(username=self.cleaned_data['username'],
+                                 password=self.cleaned_data['password'])
+        if self.user is not None:
+            if not self.user.is_active:
+                raise forms.ValidationError("Disabled account")
+        else:
+            raise forms.ValidationError("Wrong login or password. Check it.")
