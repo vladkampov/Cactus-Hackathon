@@ -4,16 +4,19 @@
     <div class="container">
         <div id="feed" class="content">
             <h1>Feed of streams</h1>
-            <div id="idOfStream" class="row">
+            {% for object in objects %}
+            <div id="{{ object.pk }}" class="row">
                 <div class="col-xs-4">
-                    <a href="#"><img src="https://www.healthit.gov/sites/default/files/video_img_2_new.png" width="100%" class="img-thumbnail"></a>
+                    <a href="#"><img src="{{ object.thumbnail.url }}"
+                    width="100%" class="img-thumbnail"></a>
                 </div>
                 <div class="col-xs-8">
-                    <h3><a href="#">Lecture Online Services</a></h3>
-                    <p>Новый шаг в онлайн обучении с гарантией сохранения качества традиционной формы образования.</p>
-                    <p><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> 150 viewers</p>
+                    <h3><a href="{{ object.url }}">{{ object.title }}</a></h3>
+                    <p>{{ object.description }}</p>
+                    <p><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{ object.views }} viewers</p>
                 </div>            
             </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

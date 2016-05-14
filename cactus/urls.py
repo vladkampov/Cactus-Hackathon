@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 
 import personal.urls
@@ -29,7 +30,7 @@ urlpatterns = [
     url(r'^logout/$', 'django.contrib.auth.views.logout',
         {'next_page': '/feed/'}, name='logout'),
     url(r'^', include(personal.urls)),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if settings.DEBUG:

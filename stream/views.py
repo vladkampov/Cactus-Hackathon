@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from stream.models import Stream
 
 
 def index(request):
@@ -10,4 +11,9 @@ def stream(request):
 
 
 def feed(request):
-    return render(request, 'feed.html')
+    objects = Stream.objects.all()[:10]
+    context = {
+        'objects': objects,
+        'title': "Streams feed",
+    }
+    return render(request, 'feed.html', context)

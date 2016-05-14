@@ -37,20 +37,3 @@ class Profile(models.Model):
 
     avatar = models.ImageField("avatar", upload_to="avatar/", blank=True)
     student_info = models.ForeignKey(StudentCard, blank=True)
-
-    # def __init__(self, *args, **kwargs):
-    #     import ipdb; ipdb.set_trace()
-    #     self.user = User.objects.create_user(username=kwargs['username'],
-    #                                          email=kwargs['email'],
-    #                                          password=kwargs['password'])
-    #     self.type = kwargs['type']
-
-    #     if kwargs['type'] == "Student":
-    #         self.avatar = kwargs['avatar']
-    #         try:
-    #             self.student_info = StudentCard.objects.get(card_id=kwargs['student_card'])
-    #         except StudentCard.DoesNotExists:
-    #             raise Exception("No such student in base")
-    #     elif kwargs['type'] == "Teacher":
-    #         if 'avatar' in kwargs:
-    #             self.avatar = kwargs['avatar']
