@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,8 +6,8 @@
         <meta name="format-detection" content="telephone=no">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="/static/build/css/libs.css">
-        <script src="/static/build/js/libs.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'build/css/libs.css' %}">
+        <script src="{% static 'build/js/libs.js' %}" type="text/javascript"></script>
     </head>
     <body>
         <div class="container">
