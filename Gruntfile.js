@@ -37,6 +37,13 @@ module.exports = function(grunt) {
           'static/css/libs.css': ['node_modules/bootstrap/dist/css/bootstrap.min.css']
         }
       }
+    },
+    copy: {
+      fonts: {
+        files: [
+          {expand: true, flatten: true, src: 'node_modules/bootstrap/dist/fonts/**', dest: 'static/fonts/'}
+        ]
+      }
     }
   });
 
@@ -44,6 +51,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['coffee', 'less', 'concat']);
+  grunt.registerTask('default', ['coffee', 'less', 'concat', 'copy']);
 };

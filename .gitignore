@@ -98,4 +98,5 @@ static/debug_toolbar/
 static/django_extensions/
 static/css
 static/js
+static/fonts
 build/

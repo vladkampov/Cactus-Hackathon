@@ -1,27 +1,126 @@
 @grayColor: #222222;
 
-#header,
-#footer {
-    background-color: @grayColor;
-    color: #fff;
-    a {
-        color: #fff;
-    }
-}
-#header {
-    box-shadow: 5px 0 30px 0 #000;
-}
-#footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    #copyright {
-        padding: 15px;
-    }
-}
-#main {
-    margin-top: 200px;
+html, 
+body {
+    margin:0;
+    padding:0;
+    height:100%;
 }
 body {
-    background-image: url('/static/img/bg.jpg')
+    background-image: url('/static/img/bg.jpg');
+    #streamPage {
+        #stream {
+            width: 100%;
+            background-color: #222;
+            height: 600px;
+        }
+        .col-md-8,
+        .col-md-4 {
+            padding: 0;
+        }
+        #description,
+        #info,
+        #chat,
+        #another_lections {
+            padding: 15px;
+        }
+        #info {
+            img {
+                height: 100px;
+                width: 100px;
+                margin-right: 15px;
+            }
+        }
+    }
+    #header,
+    #footer {
+        background-color: @grayColor;
+        color: #fff;
+        a {
+            color: #fff;
+        }
+    }
+    #header {
+        box-shadow: 5px 0 30px 0 #000;
+        .navbar-brand span {
+            color: #84E900;
+            font-weight: bold;
+            font-size: 1.4em;
+        }
+    }
+    #footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        #copyright {
+            padding: 15px;
+        }
+    }
+    #main {
+        margin-top: 200px;
+    }
+    #registrationPage,
+    #streamPage {
+        margin-top: 25px;
+        box-shadow: 0 0 6px -1px #444;
+        padding: 25px;
+        background-color: #fff;
+    }
+    #registrationPage {
+        height: 600px;
+        padding: 0;
+        #login {
+            h1 {
+                text-align: center;
+                font-size: 7em;
+                margin-top: 75px;
+            }
+            color: #fff;
+            background: #222;
+            height: 100%;
+            form {
+                position: absolute;
+                top: 50px;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                height: 200px;
+                width: 270px;
+                input {
+                    width: 100%;
+                    margin: 10px 0;
+                }
+            }
+        }
+        #reg {
+            form {
+                width: 270px;
+                margin: 50px auto;
+                input {
+                    width: 100%;
+                    margin: 10px 0;
+                }
+                #div_id_avatar {
+                    position: relative;
+                    overflow: hidden;
+                    margin: 10px 0;
+                    #id_avatar {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        margin: 0;
+                        padding: 0;
+                        font-size: 20px;
+                        cursor: pointer;
+                        opacity: 0;
+                        filter: alpha(opacity=0);
+                    }
+                }
+            }
+            -webkit-box-shadow: -40px 0px 34px -35px #000;
+            -moz-box-shadow: -40px 0px 34px -35px #000;
+            box-shadow: -40px 0px 34px -35px #000;
+        }
+    }
 }
