@@ -8,5 +8,6 @@ def index(request):
 def stream(request):
     return render(request, 'stream.html')
 
+
 def feed(request):
-	return render(request, 'feed.html')
+    return render(request, 'feed.html')

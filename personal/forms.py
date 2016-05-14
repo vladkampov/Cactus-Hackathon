@@ -10,10 +10,13 @@ from personal.models import Profile, StudentCard
 class RegistrationForm(forms.Form):
     email = forms.EmailField(label="Enter email:")
     username = forms.CharField(label="Enter username:")
-    password1 = forms.CharField(label="Enter your password:", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Validate password:", widget=forms.PasswordInput)
+    password1 = forms.CharField(label="Enter your password:",
+                                widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Validate password:",
+                                widget=forms.PasswordInput)
     avatar = forms.ImageField(required=False)
-    student_id = forms.CharField(label="Enter your student card id:", required=False)
+    student_id = forms.CharField(label="Enter your student card id:",
+                                 required=False)
     type = forms.CharField(widget=forms.HiddenInput())
 
     def __init__(self, *args, **kwargs):
@@ -25,8 +28,11 @@ class RegistrationForm(forms.Form):
 
     def setup_helper(self):
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Register', css_class="btn-success"))
-        if self.fields['type'].initial == "student" or 'type' in self.data and self.data['type'] == "student":
+        self.helper.add_input(Submit('submit', 'Register',
+                                     css_class="btn-success"))
+        if self.fields['type'].initial == "student" or \
+                'type' in self.data and\
+                self.data['type'] == "student":
             self.fields['avatar'].required = True
         else:
             self.fields['student_id'].label = "Enter your teachers id:"
@@ -44,9 +50,7 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError("No such student card id in database")
 
         # Validate passwords
-        try:
-            assert self.data['password1'] == self.data['password2']
-        except:
+        if self.data['password1'] != self.data['password2']:
             raise forms.ValidationError("Passwords are not equal")
 
         return self.data
@@ -70,7 +74,8 @@ class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Login', css_class="btn-success"))
+        self.helper.add_input(Submit('submit', 'Login',
+                              css_class="btn-success"))
 
     def clean(self):
         self.user = authenticate(username=self.cleaned_data['username'],
