@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Стриминг лекций в режиме в реального времени + возможность просмотра уже записанных учёбных лекций с проверкой того, действительно ли человек смотрит лекцию.",
   "scripts": {
-    "collect": "grunt && ./manage.py collectstatic",
+    "collect": "grunt && python manage.py collectstatic",
     "start": "grunt && python manage.py collectstatic && ./manage.py runserver"
   },
   "repository": {
