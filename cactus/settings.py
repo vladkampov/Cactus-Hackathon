@@ -133,6 +133,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/build/')
 
 STATICFILES_DIRS = (
   os.path.join(BASE_DIR, 'static/build_grunt'),
+  os.path.join(BASE_DIR, 'static/img'),
 )
 
 MEDIA_ROOT = BASE_DIR + '/media/'
