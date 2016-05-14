@@ -3,7 +3,8 @@
 
 ## Инструкция
 ```
-virtualenv /usr/bin/python3 env
+sudo apt-get install python3-virtualenv
+virtualenv -p /usr/bin/python3 env
 source env/bin/activate
 sudo apt-get install zlib1g-dev libjpeg-dev python3-dev
 pip install -r requirements.txt
