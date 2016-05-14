@@ -26,14 +26,15 @@ module.exports = function(grunt) {
           join: true
         },
         files: {
-          'static/js/app.js': ['static/src/coffee/**/*.coffee'],
+          'static/js/formUtil.js': ['static/src/coffee/formUtil.coffee'],
+          'static/js/snapshot.js': ['static/src/coffee/snapshot.coffee'],
         }
       }
     },
     concat: {
       libs: {
         files: {
-          'static/js/libs.js': ['node_modules/jquery/dist/jquery.min.js', 'node_modules/bootstrap/dist/js/bootstrap.min.js'],
+          'static/js/libs.js': ['node_modules/jquery/dist/jquery.min.js', 'node_modules/bootstrap/dist/js/bootstrap.min.js', 'node_modules/webcamjs/webcam.min.js'],
           'static/css/libs.css': ['node_modules/bootstrap/dist/css/bootstrap.min.css']
         }
       }
