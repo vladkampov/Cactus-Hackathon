@@ -16,7 +16,7 @@ module.exports = function(grunt) {
           compress: true
         },
         files: {
-          'static/build/css/style.css': ['static/src/less/**/*.less']
+          'static/build_grunt/css/style.css': ['static/src/less/**/*.less']
         }
       }
     },
@@ -26,15 +26,15 @@ module.exports = function(grunt) {
           join: true
         },
         files: {
-          'static/build/js/app.js': ['static/src/coffee/**/*.coffee'],
+          'static/build_grunt/js/app.js': ['static/src/coffee/**/*.coffee'],
         }
       }
     },
     concat: {
       libs: {
         files: {
-          'static/build/js/libs.js': ['node_modules/jquery/dist/jquery.min.js', 'node_modules/bootstrap/dist/js/bootstrap.min.js'],
-          'static/build/css/libs.css': ['node_modules/bootstrap/dist/css/bootstrap.min.css']
+          'static/build_grunt/js/libs.js': ['node_modules/jquery/dist/jquery.min.js', 'node_modules/bootstrap/dist/js/bootstrap.min.js'],
+          'static/build_grunt/css/libs.css': ['node_modules/bootstrap/dist/css/bootstrap.min.css']
         }
       }
     }

@@ -5,18 +5,13 @@ from personal.forms import RegistrationForm
 
 
 @csrf_exempt
-def registration(request):
-    # if this is a POST request we need to process the form data
+def registration(request, type):
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = RegistrationForm(request.POST)
-        # check whether it's valid:
+        form = RegistrationForm(type, request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/thanks/')
-
-    # if a GET (or any other method) we'll create a blank form
     else:
-        form = RegistrationForm()
+        form = RegistrationForm(type)
 
     return render(request, 'registration.html', {'form': form})
