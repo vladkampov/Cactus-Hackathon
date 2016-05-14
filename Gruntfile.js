@@ -1,17 +1,13 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     watch: {
-      frontend: {
+      scripts: {
         files: ['static/src/coffee/**/*.coffee'],
-        tasks: ['coffee:frontend']
-      },
-      backend: {
-        files: ['static/src/coffee/**/*.coffee'],
-        tasks: ['coffee:backend']
+        tasks: ['coffee:static']
       },
       styles: {
         files: ['static/src/less/**/*.less'],
-        tasks: ['less']
+        tasks: ['less:dev']
       }
     },
     less: {
@@ -24,9 +20,6 @@ module.exports = function(grunt) {
         }
       }
     },
-    clean: {
-      build: ['static/build/']
-    },
     coffee: {
       static: {
         options: {
@@ -36,12 +29,21 @@ module.exports = function(grunt) {
           'static/build/js/app.js': ['static/src/coffee/**/*.coffee'],
         }
       }
+    },
+    concat: {
+      libs: {
+        files: {
+          'static/build/js/libs.js': ['node_modules/jquery/dist/jquery.min.js', 'node_modules/bootstrap/dist/js/bootstrap.min.js'],
+          'static/build/css/libs.css': ['node_modules/bootstrap/dist/css/bootstrap.min.css']
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-concat');
 
-  grunt.registerTask('default', ['coffee', 'less']);
+  grunt.registerTask('default', ['coffee', 'less', 'concat']);
 };
