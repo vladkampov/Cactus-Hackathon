@@ -17,8 +17,8 @@ from django.conf.urls import url, include
 from django.conf import settings
 from django.contrib import admin
 
-import personal
-import stream
+import personal.urls
+import stream.urls
 
 
 urlpatterns = [

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 
 TYPE_CHOICES = (
@@ -23,24 +23,33 @@ class Group(models.Model):
 
 class StudentCard(models.Model):
     card_id = models.CharField(max_length=30, primary_key=True)
-    name = models.CharField(max_length=50, required=True)
-    surname = models.CharField(max_length=50, required=True)
+    name = models.CharField(max_length=50, blank=False)
+    surname = models.CharField(max_length=50, blank=False)
     group = models.ForeignKey(Group)
 
     def __str__(self):
         return "%s - %s %s (%s)" % (self.card_id, self.name, self.surname, self.group.name)
 
 
-class Profile(AbstractUser):
-    type = models.CharField(choices=TYPE_CHOICES, required=True)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    type = models.CharField(max_length=30, choices=TYPE_CHOICES, blank=False)
 
-    avatar = models.ImageField(ubpload_to="avatar/", blank=True)
+    avatar = models.ImageField("avatar", upload_to="avatar/", blank=True)
     student_info = models.ForeignKey(StudentCard, blank=True)
 
-    def __init__(self, login, email, _type, **kwargs):
-        self.login = login
-        self.email = email
-        self.type = _type
+    def __init__(self, *args, **kwargs):
+        self.user = User.objects.create_user(username=kwargs['username'],
+                                             email=kwargs['email'],
+                                             password=kwargs['password'])
+        self.type = kwargs['type']
 
-        if _type == "Student":
-            self.avatar = 
+        if kwargs['type'] == "Student":
+            self.avatar = kwargs['avatar']
+            try:
+                self.student_info = StudentCard.objects.get(card_id=kwargs['student_card'])
+            except StudentCard.DoesNotExists:
+                raise Exception("No such student in base")
+        elif kwargs['type'] == "Teacher":
+            if 'avatar' in kwargs:
+                self.avatar = kwargs['avatar']
