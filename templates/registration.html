@@ -1,0 +1,12 @@
+<form action="/registration/" method="post">
+	{% csrf_token %}
+    <label for="username">Username: </label>
+    <input id="username" type="text" name="username" value="{{ username }}">
+    <label for="email">email: </label>
+    <input id="email" type="text" name="email" value="{{ email }}">
+    <label for="pasword1">Password: </label>
+    <input id="pasword1" type="text" name="pasword1" value="{{ pasword1 }}">
+    <label for="pasword2">Validate password: </label>
+    <input id="pasword2" type="text" name="pasword2" value="{{ pasword2 }}">
+    <input type="submit" value="OK">
+</form>

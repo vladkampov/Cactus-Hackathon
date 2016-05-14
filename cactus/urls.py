@@ -23,7 +23,7 @@ import stream.urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^personal/', include(personal.urls)),
+    url(r'^', include(personal.urls)),
     url(r'^stream/', include(stream.urls)),
 ]
 
