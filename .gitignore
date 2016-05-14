@@ -92,6 +92,7 @@ README.md
 *.sublime*
 node_modules
 static/build
+static/build_grunt
 static/admin
 static/debug_toolbar/
 static/django_extensions/
