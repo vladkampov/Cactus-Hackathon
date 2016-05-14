@@ -20,7 +20,11 @@
                             <ul class="nav navbar-nav">
                                 <li class="active"><a href="/feed">Feed</a></li>
                                 <li><a href="/stream">Test Stream</a></li>
-                                <li><a href="/login" class="btn-success">Log in</a></li>
+                                {% if user.is_authenticated %}
+                                    <li><a href="{% url 'logout' %}" class="btn-success">{{ user.username }} - Log out</a></li>
+                                {% else %}
+                                    <li><a href="/login" class="btn-success">Log in</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>

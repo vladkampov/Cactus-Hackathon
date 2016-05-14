@@ -7,6 +7,8 @@ from personal.forms import RegistrationForm, LoginForm
 
 @csrf_exempt
 def registration(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/stream/')
     if request.method == 'POST':
         if 'type' in request.POST:
             # Registration. A little bit hacky.
@@ -33,7 +35,7 @@ def registration(request):
             login_form = LoginForm(request.POST)
             if login_form.is_valid():
                 user = authenticate(username=login_form.user.username,
-                                    password=login_form.user.password)
+                                    password=request.POST['password'])
                 login(request, user)
                 return HttpResponseRedirect('/stream/')
     else:

@@ -24,9 +24,11 @@ import stream.urls
 urlpatterns = [
     url(r'^$', 'stream.views.index', name='index'),
     url(r'^feed/$', 'stream.views.feed', name='feed'),
-    url(r'^', include(personal.urls)),
     url(r'^stream/', include(stream.urls)),
     url(r'^admin/', admin.site.urls),
+    url(r'^logout/$', 'django.contrib.auth.views.logout',
+        {'next_page': '/feed/'}, name='logout'),
+    url(r'^', include(personal.urls)),
 ]
 
 
