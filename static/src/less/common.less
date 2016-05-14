@@ -47,6 +47,9 @@ body {
             font-weight: bold;
             font-size: 1.4em;
         }
+        a:hover {
+            color: #222;
+        }
     }
     #footer {
         position: absolute;
@@ -60,7 +63,8 @@ body {
         margin-top: 200px;
     }
     #registrationPage,
-    #streamPage {
+    #streamPage,
+    #feed {
         margin-top: 25px;
         box-shadow: 0 0 6px -1px #444;
         padding: 25px;
@@ -88,8 +92,12 @@ body {
                 height: 200px;
                 width: 270px;
                 input {
+                    color: #222;
                     width: 100%;
                     margin: 10px 0;
+                }
+                input[name="submit"] {
+                    color: #fff;
                 }
             }
         }
@@ -121,6 +129,18 @@ body {
             -webkit-box-shadow: -40px 0px 34px -35px #000;
             -moz-box-shadow: -40px 0px 34px -35px #000;
             box-shadow: -40px 0px 34px -35px #000;
+        }
+    }
+    #feed {
+        padding: 0;
+        h1 {
+            padding: 15px;
+        }
+        .row {
+            h3 {
+                margin-top: 0;
+            }
+            padding: 0 25px 0 0;
         }
     }
 }
