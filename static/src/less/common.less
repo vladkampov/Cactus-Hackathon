@@ -83,6 +83,17 @@ body {
         box-shadow: 0 0 6px -1px #444;
         padding: 25px;
         background-color: #fff;
+        .row {
+            .online {
+                display: none;
+            }
+        }
+        .row[data-active="True"] {
+            .online {
+                font-size: 0.5em;
+                display: inline-block;
+            }
+        }
     }
     #registrationPage {
         height: 600px;
