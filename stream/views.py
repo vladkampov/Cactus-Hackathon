@@ -112,10 +112,11 @@ def stream_final(request, pk):
     statistics = Statistics.objects.filter(stream=stream)
 
     objects_list = []
+    max_time = statistics.aggregate(Max('max_time'))['max_time__max']
     for obj in statistics:
         res = {
             'statistics': obj,
-            'percentage': obj.spent_time / obj.max_time * 100,
+            'percentage': obj.spent_time / max_time * 100,
         }
         objects_list.append(res)
 

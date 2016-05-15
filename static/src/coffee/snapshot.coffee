@@ -24,7 +24,7 @@ window.take_snapshot = ()->
 window.falseCaptchaTimeout = ()->
     $('#captchaSubmit').modal('hide');
     grecaptcha.reset()
-    return $.post("/validate/captcha/", {here: false})
+    return $.post("/validate/captcha/", {here: false, 'object': object})
 
 window.take_captcha = ()->
     $('#captchaSubmit').modal()
