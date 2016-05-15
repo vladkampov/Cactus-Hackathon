@@ -6,9 +6,9 @@ $('form').submit (e)->
     clearTimeout timeOut
     $.post "/validate/captcha/", {'form': $(@).serialize(), 'object': object}, (response)->
         if response.captcha is true
-            $('#log').append('<span class="alert-success">captcha identify: ' + response.identical + '</span></br>')
+            $('#log').append('<span class="alert-success">captcha identify: ' + response.captcha + '</span></br>')
         else
-            $('#log').append('<span class="alert-danger">captcha identify: ' + response.identical + '</span></br>')
+            $('#log').append('<span class="alert-danger">captcha identify: ' + response.captcha + '</span></br>')
     grecaptcha.reset()
 
 Webcam.attach '#mycamera'

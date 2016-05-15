@@ -46,7 +46,7 @@ def validate_photo(request):
     stream = Stream.objects.get(pk=request.POST['object'])
     statistics, created = Statistics.objects.get_or_create(stream=stream,
                                                            user=profile)
-    statistics.max_time += 3
+    statistics.max_time += 1
     statistics.save()
 
     user_face_id = profile.face_id
@@ -111,12 +111,11 @@ def stream_final(request, pk):
     stream = Stream.objects.get(pk=pk)
     statistics = Statistics.objects.filter(stream=stream)
 
-    max_time = statistics.first().max_time
     objects_list = []
     for obj in statistics:
         res = {
             'statistics': obj,
-            'percentage': obj.spent_time / max_time * 100,
+            'percentage': obj.spent_time / obj.max_time * 100,
         }
         objects_list.append(res)
 
