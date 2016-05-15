@@ -138,3 +138,5 @@ STATICFILES_DIRS = (
 
 MEDIA_ROOT = BASE_DIR + '/media/'
 MEDIA_URL = "/media/"
+
+MICROSOFT_API_KEY = 'de05aea561504c58bcc54b4b13ceca8a'

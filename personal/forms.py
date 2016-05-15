@@ -64,6 +64,7 @@ class RegistrationForm(forms.Form):
                                          avatar=self.cleaned_data['avatar'],
                                          type=self.cleaned_data['type'],
                                          student_info=student_info)
+        self.profile.generate_face_id()
         return profile
 
 

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from cactus.utils import get_face_id
+
 
 TYPE_CHOICES = (
     ("teacher", "teacher"),
@@ -37,3 +39,8 @@ class Profile(models.Model):
 
     avatar = models.ImageField("avatar", upload_to="avatar/", blank=True)
     student_info = models.ForeignKey(StudentCard, blank=True)
+    face_id = models.CharField(max_length=60, blank=True)
+
+    def generate_face_id(self):
+        data = self.avatar.file.file.read()
+        self.face_id = get_face_id(data)
