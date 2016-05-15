@@ -1,8 +1,6 @@
 from django.db import models
 from personal.models import Profile
 
-REQUEST_INTERVAL = 60
-
 
 class Stream(models.Model):
     thumbnail = models.ImageField('stream_thumbnail', upload_to='thumbnail',
@@ -24,4 +22,7 @@ class Stream(models.Model):
 class Statistics(models.Model):
     stream = models.ForeignKey(Stream)
     user = models.ForeignKey(Profile)
-    spent_time = models.IntegerField()
+    spent_time = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ("stream", "user")

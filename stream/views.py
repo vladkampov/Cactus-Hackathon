@@ -8,7 +8,7 @@ import base64
 import json
 
 from cactus import utils
-from stream.models import Stream
+from stream.models import Stream, Statistics
 from personal.models import Profile
 
 
@@ -61,6 +61,13 @@ def validate_photo(request):
         data = json.loads(data.decode('utf-8'))
         is_ident = data['isIdentical']
         conn.close()
+        if is_ident:
+            stream = Stream.objects.get(pk=request.POST['object'])
+            profile = Profile.objects.get(user=request.user)
+            statistics, created = Statistics.objects.get_or_create(stream=stream,
+                                                                   user=profile)
+            statistics.spent_time += 1
+            statistics.save()
         return HttpResponse(json.dumps({'identical': is_ident}),
                             content_type="application/json")
     except Exception:
@@ -70,11 +77,25 @@ def validate_photo(request):
     return
 
 
-def validate_captcha(captcha_response):
-    
-    captcha_data = bytes(urllib.parse.urlencode({
-        'secret': '6Ldg5x8TAAAAAEStTib3_vUfM5MHM4S4rysu0nt9',
-        'response': captcha_response,
-    }).encode())
-    return json.loads(urllib.request.urlopen('https://www.google.com/recaptcha/api/siteverify',
-                                             captcha_data).read().decode('utf-8'))['success']
+@csrf_exempt
+def validate_captcha(request):
+    data = request.POST
+    if 'here' not in data:
+        captcha_data = bytes(urllib.parse.urlencode({
+            'secret': '6Ldg5x8TAAAAAEStTib3_vUfM5MHM4S4rysu0nt9',
+            'response': data['form'].split('=')[-1],
+        }).encode())
+        result = json.loads(urllib.request.urlopen('https://www.google.com/recaptcha/api/siteverify',
+                                                   captcha_data).read().decode('utf-8'))['success']
+        if result:
+            stream = Stream.objects.get(pk=data['object'])
+            profile = Profile.objects.get(user=request.user)
+            statistics, created = Statistics.objects.get_or_create(stream=stream,
+                                                                   user=profile)
+            statistics.spent_time += 3
+            statistics.save()
+            return HttpResponse(json.dumps({'captcha': True}),
+                                content_type="applicration/json")
+
+    return HttpResponse(json.dumps({'captcha': False}),
+                        content_type="application/json")

@@ -37,13 +37,12 @@ def registration(request):
                 user = authenticate(username=login_form.user.username,
                                     password=request.POST['password'])
                 login(request, user)
-                return HttpResponseRedirect('/stream/')
+                return HttpResponseRedirect('/feed/')
     else:
         login_form = LoginForm()
 
     student_form = RegistrationForm(initial={'type': "student"})
     teacher_form = RegistrationForm(initial={'type': "teacher"})
-
 
     return render(request, 'registration.html', {'student_form': student_form,
                                                  'teacher_form': teacher_form,
