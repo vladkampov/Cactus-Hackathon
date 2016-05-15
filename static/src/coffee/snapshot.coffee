@@ -13,7 +13,10 @@ Webcam.attach '#mycamera'
 window.take_snapshot = ()->
     Webcam.snap (data_url)->
         $.post "/validate/photo/", {'image': data_url, 'object': object}, (response)->
-            console.log response
+            if response.identical is true
+                $('#log').append('<span class="alert-success">Face identify: ' + response.identical + '</span></br>')
+            else
+                $('#log').append('<span class="alert-danger">Face identify: ' + response.identical + '</span></br>')
 
 window.falseCaptchaTimeout = ()->
     $('#captchaSubmit').modal('hide');
