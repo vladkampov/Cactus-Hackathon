@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load staticfiles %}
+<div id="streamPage" class="container">
+    <div>
+        <div>
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Persentage</th>
+                    <th>Passed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for obj in objects %}
+                  <tr>
+                    <td>{{ obj.statistics.user.user.username }}</td>
+                    <td>{{ obj.percentage }}</td>
+                    <td>
+                    {% if obj.percentage > 60 %}
+                        Passed
+                    {% else %}
+                        Failed
+                    {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>
+        <div id="info" class="clearfix">
+            <img src="{{ MEDIA_URL }}{{ stream.owner.avatar }}" class="img-thumbnail pull-left" alt="ava">
+            <h4>Author: {{ stream.owner.user.username }}</h4>
+            <p class="pull-right"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{ stream.views }} viewers</p>
+        </div>
+    </div>
+    <div class="col-md-4 hidden">
+        <div id="chat"></div>
+        <div id="another_lections"></div>
+    </div>
+    <!-- Modal -->
+    <div id="result"></div>
+    <script type="text/javascript">
+        var object = {{ object.pk }};
+    </script>
+</div>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.conf import settings
+from django.db.models import Max
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import urllib
@@ -43,11 +44,12 @@ def validate_photo(request):
     }
     profile = Profile.objects.get(user=request.user)
     user_face_id = profile.face_id
-    data = base64.b64decode(request.POST['image'].split(',')[-1])
     try:
+        data = base64.b64decode(request.POST['image'].split(',')[-1])
         face_id = utils.get_face_id(data)
     except:
-        return HttpResponse(context={'identical': False})
+        return HttpResponse(json.dumps({'identical': False}),
+                            content_type="application/json")
 
     data = {
         "faceId1": user_face_id,
@@ -99,3 +101,19 @@ def validate_captcha(request):
 
     return HttpResponse(json.dumps({'captcha': False}),
                         content_type="application/json")
+
+
+def stream_final(request, pk):
+    stream = Stream.objects.get(pk=pk)
+    statistics = Statistics.objects.filter(stream=stream)
+
+    max_time = statistics.aggregate(Max('spent_time'))['spent_time__max']
+    objects_list = []
+    for obj in statistics:
+        res = {
+            'statistics': obj,
+            'percentage': obj.spent_time / max_time * 100,
+        }
+        objects_list.append(res)
+
+    return render(request, 'stream_final.html', {"objects": objects_list, "stream": stream})
