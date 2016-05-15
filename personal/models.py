@@ -41,6 +41,9 @@ class Profile(models.Model):
     student_info = models.ForeignKey(StudentCard, blank=True)
     face_id = models.CharField(max_length=60, blank=True)
 
+    def __str__(self):
+        return "%s - %s" % (self.user.username, self.type)
+
     def generate_face_id(self):
         data = self.avatar.file.file.read()
         self.face_id = get_face_id(data)

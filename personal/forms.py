@@ -53,7 +53,7 @@ class RegistrationForm(forms.Form):
         if self.data['password1'] != self.data['password2']:
             raise forms.ValidationError("Passwords are not equal")
 
-        return self.data
+        return self.cleaned_data
 
     def save(self):
         user = User.objects.create_user(self.cleaned_data['username'],
@@ -64,7 +64,7 @@ class RegistrationForm(forms.Form):
                                          avatar=self.cleaned_data['avatar'],
                                          type=self.cleaned_data['type'],
                                          student_info=student_info)
-        self.profile.generate_face_id()
+        profile.generate_face_id()
         return profile
 
 
@@ -79,10 +79,13 @@ class LoginForm(forms.Form):
                               css_class="btn-success"))
 
     def clean(self):
-        self.user = authenticate(username=self.cleaned_data['username'],
-                                 password=self.cleaned_data['password'])
-        if self.user is not None:
-            if not self.user.is_active:
-                raise forms.ValidationError("Disabled account")
+        if self.cleaned_data['username'] and self.cleaned_data['password']:
+            self.user = authenticate(username=self.cleaned_data['username'],
+                                     password=self.cleaned_data['password'])
+            if self.user is not None:
+                if not self.user.is_active:
+                    raise forms.ValidationError("Disabled account")
+            else:
+                raise forms.ValidationError("Wrong login or password. Check it.")
         else:
             raise forms.ValidationError("Wrong login or password. Check it.")

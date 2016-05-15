@@ -8,8 +8,8 @@
             <video id="videoOutput" autoplay width="100%" height="600px" style="background-color: black"></video>
         </div>
         <div id="info" class="clearfix">
-            <img src="{{ MEDIA_URL }}{{ object.thumbnail }}" class="img-thumbnail pull-left" alt="ava">
-            <h4>Lecture name</h4>
+            <img src="{{ MEDIA_URL }}{{ object.owner.avatar }}" class="img-thumbnail pull-left" alt="ava">
+            <h4>{{ object.owner.user.username }}</h4>
             <p>Just one cool guy</p>
             <p class="pull-right"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{ object.views }} viewers</p>
         </div>
