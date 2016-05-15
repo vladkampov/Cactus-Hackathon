@@ -19,9 +19,12 @@
                         <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
                                 <li class="active"><a href="/feed">Feed</a></li>
-                                <li><a href="/stream">Test Stream</a></li>
+                                {% if user.type == 'teacher' %}
+                                    <li><a href="/stream-out">Test Stream</a></li>
+                                {% else %}
+                                    <li><a href="/stream/1">Test Stream</a></li>
+                                {% endif %}
                                 {% if user.is_authenticated %}
-                                    <li><a href="{% url 'logout' %}" class="btn-success">{{ user.username }} - Log out</a></li>
                                 {% else %}
                                     <li><a href="/login" class="btn-success">Log in</a></li>
                                 {% endif %}
@@ -33,10 +36,5 @@
         </div>
         {% block content %}
         {% endblock %}
-<!--         <div id="footer">
-            <div class="container">
-                <div id="copyright">footer things</div>
-            </div>
-        </div> -->
     </body>
 </html>

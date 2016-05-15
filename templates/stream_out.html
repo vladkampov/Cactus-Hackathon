@@ -1,170 +1,177 @@
+{% extends 'base.html' %}
+
+{% block content %}
 {% load staticfiles %}
-<html>
-	<head>
-		<script src="{% static 'js/libs.js' %}" type="text/javascript"></script>
-		<script src="{% static 'js/adapter.js' %}" type="text/javascript"></script>
-		<script src="{% static 'js/kurento-client.js' %}" type="text/javascript"></script>
-		<script src="{% static 'js/kurento-utils.js' %}" type="text/javascript"></script>
-	</head>
-	<body>
-		<video id="videoInput" autoplay width="480px" height="360px" style="background-color: black"></video>
-		<button id="call"></button>
-		<script type="text/javascript">
-			var ws = new WebSocket('wss://timenko.com:8443/one2many');
-var video;
-var webRtcPeer;
+<div id="streamPage" class="container">
+    <div>
+        <div id="stream">
+            <video id="videoInput" autoplay width="100%" height="600" style="background-color: black"></video        
+        </div>
+        <div id="info" class="clearfix">
+            <img src="http://cs628527.vk.me/v628527991/4ee6/3a1m4apBg28.jpg" class="img-thumbnail pull-left" alt="ava">
+            <h4>Lecture name</h4>
+            <button id="call" class="btn btn-success">Start Lecture</button>
+            <p class="pull-right"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> 150 viewers</p>
+        </div>
+    </div>
+</div>
+    
+<script src="{% static 'js/stream_out.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+    var ws = new WebSocket('wss://timenko.com:8443/one2many');
+    var video;
+    var webRtcPeer;
 
-window.onload = function() {
-	video = document.getElementById('videoInput');
+    window.onload = function() {
+        video = document.getElementById('videoInput');
 
-	document.getElementById('call').addEventListener('click', function() { presenter(); } );
-}
+        document.getElementById('call').addEventListener('click', function() { presenter(); } );
+    }
 
-window.onbeforeunload = function() {
-	ws.close();
-}
+    window.onbeforeunload = function() {
+        ws.close();
+    }
 
-ws.onmessage = function(message) {
-	var parsedMessage = JSON.parse(message.data);
-	console.info('Received message: ' + message.data);
+    ws.onmessage = function(message) {
+        var parsedMessage = JSON.parse(message.data);
+        console.info('Received message: ' + message.data);
 
-	switch (parsedMessage.id) {
-	case 'presenterResponse':
-		presenterResponse(parsedMessage);
-		break;
-	case 'viewerResponse':
-		viewerResponse(parsedMessage);
-		break;
-	case 'stopCommunication':
-		dispose();
-		break;
-	case 'iceCandidate':
-		webRtcPeer.addIceCandidate(parsedMessage.candidate)
-		break;
-	default:
-		console.error('Unrecognized message', parsedMessage);
-	}
-}
+        switch (parsedMessage.id) {
+        case 'presenterResponse':
+            presenterResponse(parsedMessage);
+            break;
+        case 'viewerResponse':
+            viewerResponse(parsedMessage);
+            break;
+        case 'stopCommunication':
+            dispose();
+            break;
+        case 'iceCandidate':
+            webRtcPeer.addIceCandidate(parsedMessage.candidate)
+            break;
+        default:
+            console.error('Unrecognized message', parsedMessage);
+        }
+    }
 
-function presenterResponse(message) {
-	if (message.response != 'accepted') {
-		var errorMsg = message.message ? message.message : 'Unknow error';
-		console.warn('Call not accepted for the following reason: ' + errorMsg);
-		dispose();
-	} else {
-		webRtcPeer.processAnswer(message.sdpAnswer);
-	}
-}
+    function presenterResponse(message) {
+        if (message.response != 'accepted') {
+            var errorMsg = message.message ? message.message : 'Unknow error';
+            console.warn('Call not accepted for the following reason: ' + errorMsg);
+            dispose();
+        } else {
+            webRtcPeer.processAnswer(message.sdpAnswer);
+        }
+    }
 
-function viewerResponse(message) {
-	if (message.response != 'accepted') {
-		var errorMsg = message.message ? message.message : 'Unknow error';
-		console.warn('Call not accepted for the following reason: ' + errorMsg);
-		dispose();
-	} else {
-		webRtcPeer.processAnswer(message.sdpAnswer);
-	}
-}
+    function viewerResponse(message) {
+        if (message.response != 'accepted') {
+            var errorMsg = message.message ? message.message : 'Unknow error';
+            console.warn('Call not accepted for the following reason: ' + errorMsg);
+            dispose();
+        } else {
+            webRtcPeer.processAnswer(message.sdpAnswer);
+        }
+    }
 
-function presenter() {
-	if (!webRtcPeer) {
-		var options = {
-			localVideo: video,
-			onicecandidate : onIceCandidate
-	    }
+    function presenter() {
+        if (!webRtcPeer) {
+            var options = {
+                localVideo: video,
+                onicecandidate : onIceCandidate
+            }
 
-		webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
-			if(error) return;
+            webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
+                if(error) return;
 
-			this.generateOffer(onOfferPresenter);
-		});
-	}
-}
+                this.generateOffer(onOfferPresenter);
+            });
+        }
+    }
 
-function onOfferPresenter(error, offerSdp) {
-    if (error) return;
+    function onOfferPresenter(error, offerSdp) {
+        if (error) return;
 
-	var message = {
-		id : 'presenter',
-		sdpOffer : offerSdp
-	};
-	sendMessage(message);
-}
+        var message = {
+            id : 'presenter',
+            sdpOffer : offerSdp
+        };
+        sendMessage(message);
+    }
 
-function viewer() {
-	if (!webRtcPeer) {
-		var options = {
-			remoteVideo: video,
-			onicecandidate : onIceCandidate
-		}
+    function viewer() {
+        if (!webRtcPeer) {
+            var options = {
+                remoteVideo: video,
+                onicecandidate : onIceCandidate
+            }
 
-		webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options, function(error) {
-			if(error) return;
+            webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options, function(error) {
+                if(error) return;
 
-			this.generateOffer(onOfferViewer);
-		});
-	}
-}
+                this.generateOffer(onOfferViewer);
+            });
+        }
+    }
 
-function onOfferViewer(error, offerSdp) {
-	if (error) return;
+    function onOfferViewer(error, offerSdp) {
+        if (error) return;
 
-	var message = {
-		id : 'viewer',
-		sdpOffer : offerSdp
-	}
-	sendMessage(message);
-}
+        var message = {
+            id : 'viewer',
+            sdpOffer : offerSdp
+        }
+        sendMessage(message);
+    }
 
-function onIceCandidate(candidate) {
-	   console.log('Local candidate' + JSON.stringify(candidate));
+    function onIceCandidate(candidate) {
+           console.log('Local candidate' + JSON.stringify(candidate));
 
-	   var message = {
-	      id : 'onIceCandidate',
-	      candidate : candidate
-	   }
-	   sendMessage(message);
-}
+           var message = {
+              id : 'onIceCandidate',
+              candidate : candidate
+           }
+           sendMessage(message);
+    }
 
-function stop() {
-	if (webRtcPeer) {
-		var message = {
-				id : 'stop'
-		}
-		sendMessage(message);
-		dispose();
-	}
-}
+    function stop() {
+        if (webRtcPeer) {
+            var message = {
+                    id : 'stop'
+            }
+            sendMessage(message);
+            dispose();
+        }
+    }
 
-function dispose() {
-	if (webRtcPeer) {
-		webRtcPeer.dispose();
-		webRtcPeer = null;
-	}
-	hideSpinner(video);
-}
+    function dispose() {
+        if (webRtcPeer) {
+            webRtcPeer.dispose();
+            webRtcPeer = null;
+        }
+        hideSpinner(video);
+    }
 
-function sendMessage(message) {
-	var jsonMessage = JSON.stringify(message);
-	console.log('Senging message: ' + jsonMessage);
-	ws.send(jsonMessage);
-}
+    function sendMessage(message) {
+        var jsonMessage = JSON.stringify(message);
+        console.log('Senging message: ' + jsonMessage);
+        ws.send(jsonMessage);
+    }
 
-function hideSpinner() {
-	for (var i = 0; i < arguments.length; i++) {
-		arguments[i].src = '';
-		arguments[i].poster = './img/webrtc.png';
-		arguments[i].style.background = '';
-	}
-}
+    function hideSpinner() {
+        for (var i = 0; i < arguments.length; i++) {
+            arguments[i].src = '';
+            arguments[i].poster = './img/webrtc.png';
+            arguments[i].style.background = '';
+        }
+    }
 
-/**
- * Lightbox utility (to display media pipeline image in a modal dialog)
- */
-$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
-	event.preventDefault();
-	$(this).ekkoLightbox();
-});
-		</script>
-	</body>
-</html>
+    /**
+     * Lightbox utility (to display media pipeline image in a modal dialog)
+     */
+    $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
+</script>
+{% endblock %}

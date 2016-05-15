@@ -28,13 +28,21 @@ module.exports = function(grunt) {
         files: {
           'static/js/formUtil.js': ['static/src/coffee/formUtil.coffee'],
           'static/js/snapshot.js': ['static/src/coffee/snapshot.coffee'],
+          'static/js/stream_out.js': ['static/src/coffee/stream_out.coffee']
         }
       }
     },
     concat: {
       libs: {
         files: {
-          'static/js/libs.js': ['node_modules/jquery/dist/jquery.min.js', 'node_modules/bootstrap/dist/js/bootstrap.min.js', 'node_modules/webcamjs/webcam.min.js'],
+          'static/js/libs.js': [
+            'node_modules/jquery/dist/jquery.min.js', 
+            'node_modules/bootstrap/dist/js/bootstrap.min.js', 
+            'node_modules/webcamjs/webcam.min.js',
+            'static/src/js/adapter.js',
+            'static/src/js/kurento-client.js',
+            'static/src/js/kurento-utils.js'
+          ],
           'static/css/libs.css': ['node_modules/bootstrap/dist/css/bootstrap.min.css']
         }
       }
