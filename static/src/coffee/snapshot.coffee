@@ -30,6 +30,11 @@ window.take_captcha = ()->
     $('#captchaSubmit').modal()
     timeOut = setTimeout window.falseCaptchaTimeout, 60000
 
+window.getFinalStatic = ()->
+    $.get "/stream_final/1", (data)->
+      $( "#description" ).html $(data).find('.table')
+
 setInterval window.take_snapshot, 20000
 setInterval window.take_captcha, 60000
+setInterval window.getFinalStatic, 25000
 
