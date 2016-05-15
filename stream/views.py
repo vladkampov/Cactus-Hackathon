@@ -43,6 +43,12 @@ def validate_photo(request):
         'Ocp-Apim-Subscription-Key': settings.MICROSOFT_API_KEY,
     }
     profile = Profile.objects.get(user=request.user)
+    stream = Stream.objects.get(pk=request.POST['object'])
+    statistics, created = Statistics.objects.get_or_create(stream=stream,
+                                                           user=profile)
+    statistics.max_time += 3
+    statistics.save()
+
     user_face_id = profile.face_id
     try:
         data = base64.b64decode(request.POST['image'].split(',')[-1])
@@ -64,10 +70,6 @@ def validate_photo(request):
         is_ident = data['isIdentical']
         conn.close()
         if is_ident:
-            stream = Stream.objects.get(pk=request.POST['object'])
-            profile = Profile.objects.get(user=request.user)
-            statistics, created = Statistics.objects.get_or_create(stream=stream,
-                                                                   user=profile)
             statistics.spent_time += 1
             statistics.save()
         return HttpResponse(json.dumps({'identical': is_ident}),
@@ -82,6 +84,12 @@ def validate_photo(request):
 @csrf_exempt
 def validate_captcha(request):
     data = request.POST
+    stream = Stream.objects.get(pk=data['object'])
+    profile = Profile.objects.get(user=request.user)
+    statistics, created = Statistics.objects.get_or_create(stream=stream,
+                                                           user=profile)
+    statistics.max_time += 3
+    statistics.save()
     if 'here' not in data:
         captcha_data = bytes(urllib.parse.urlencode({
             'secret': '6Ldg5x8TAAAAAEStTib3_vUfM5MHM4S4rysu0nt9',
@@ -90,10 +98,6 @@ def validate_captcha(request):
         result = json.loads(urllib.request.urlopen('https://www.google.com/recaptcha/api/siteverify',
                                                    captcha_data).read().decode('utf-8'))['success']
         if result:
-            stream = Stream.objects.get(pk=data['object'])
-            profile = Profile.objects.get(user=request.user)
-            statistics, created = Statistics.objects.get_or_create(stream=stream,
-                                                                   user=profile)
             statistics.spent_time += 3
             statistics.save()
             return HttpResponse(json.dumps({'captcha': True}),
@@ -107,7 +111,7 @@ def stream_final(request, pk):
     stream = Stream.objects.get(pk=pk)
     statistics = Statistics.objects.filter(stream=stream)
 
-    max_time = statistics.aggregate(Max('spent_time'))['spent_time__max']
+    max_time = statistics.first().max_time
     objects_list = []
     for obj in statistics:
         res = {

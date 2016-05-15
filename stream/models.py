@@ -23,6 +23,7 @@ class Statistics(models.Model):
     stream = models.ForeignKey(Stream)
     user = models.ForeignKey(Profile)
     spent_time = models.IntegerField(default=0)
+    max_time = models.IntegerField(default=0)
 
     class Meta:
         unique_together = ("stream", "user")

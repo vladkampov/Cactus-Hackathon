@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from stream.views import stream, stream_out, index, stream_final,\
-						 validate_photo, validate_captcha
+	validate_photo, validate_captcha
 
 urlpatterns = [
     url(r'^$', index, name='index'),
