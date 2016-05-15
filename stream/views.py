@@ -47,7 +47,7 @@ def validate_photo(request):
     try:
         face_id = utils.get_face_id(data)
     except:
-        return HttpResponse(context={'identical': "false"})
+        return HttpResponse(context={'identical': False})
 
     data = {
         "faceId1": user_face_id,
@@ -63,13 +63,14 @@ def validate_photo(request):
         conn.close()
         return HttpResponse(json.dumps({'identical': is_ident}),
                             content_type="application/json")
-    except Exception as e:
-        print("[Errno {0}] {1}".format(e.errno, e.strerror))
+    except Exception:
+        return HttpResponse(json.dumps({'identical': False}),
+                            content_type="application/json")
 
     return
 
 
-def check_captcha(captcha_response):
+def validate_captcha(captcha_response):
     captcha_data = bytes(urllib.parse.urlencode({
         'secret': '6Ldg5x8TAAAAAEStTib3_vUfM5MHM4S4rysu0nt9',
         'response': captcha_response,

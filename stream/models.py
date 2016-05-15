@@ -1,4 +1,5 @@
 from django.db import models
+from personal.models import Profile
 
 
 class Stream(models.Model):
@@ -12,6 +13,7 @@ class Stream(models.Model):
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
     is_active = models.BooleanField()
+    owner = models.ForeignKey(Profile)
 
     def __str__(self):
         return "%s - %s" % (self.title, self.url)
