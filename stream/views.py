@@ -71,6 +71,7 @@ def validate_photo(request):
 
 
 def validate_captcha(captcha_response):
+    
     captcha_data = bytes(urllib.parse.urlencode({
         'secret': '6Ldg5x8TAAAAAEStTib3_vUfM5MHM4S4rysu0nt9',
         'response': captcha_response,

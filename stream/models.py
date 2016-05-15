@@ -1,6 +1,8 @@
 from django.db import models
 from personal.models import Profile
 
+REQUEST_INTERVAL = 60
+
 
 class Stream(models.Model):
     thumbnail = models.ImageField('stream_thumbnail', upload_to='thumbnail',
@@ -17,3 +19,9 @@ class Stream(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.title, self.url)
+
+
+class Statistics(models.Model):
+    stream = models.ForeignKey(Stream)
+    user = models.ForeignKey(Profile)
+    spent_time = models.IntegerField()
