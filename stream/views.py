@@ -19,6 +19,10 @@ def stream(request):
     return render(request, 'stream.html')
 
 
+def stream_out(request):
+    return render(request, 'stream_out.html')
+
+
 def feed(request):
     objects = Stream.objects.all()[:10]
     context = {
