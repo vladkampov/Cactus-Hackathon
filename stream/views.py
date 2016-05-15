@@ -2,21 +2,23 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from personal.models import Profile
+import urllib
 import http.client
 import base64
 import json
 
 from cactus import utils
 from stream.models import Stream
+from personal.models import Profile
 
 
 def index(request):
     return render(request, 'index.html')
 
 
-def stream(request):
-    return render(request, 'stream.html')
+def stream(request, pk):
+    stream = Stream.objects.get(pk=pk)
+    return render(request, 'stream.html', {'object': stream})
 
 
 def stream_out(request):
@@ -59,8 +61,18 @@ def validate_photo(request):
         data = json.loads(data.decode('utf-8'))
         is_ident = data['isIdentical']
         conn.close()
-        return HttpResponse(context={'identical': is_ident})
+        return HttpResponse(json.dumps({'identical': is_ident}),
+                            content_type="application/json")
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
     return
+
+
+def check_captcha(captcha_response):
+    captcha_data = bytes(urllib.parse.urlencode({
+        'secret': '6Ldg5x8TAAAAAEStTib3_vUfM5MHM4S4rysu0nt9',
+        'response': captcha_response,
+    }).encode())
+    return json.loads(urllib.request.urlopen('https://www.google.com/recaptcha/api/siteverify',
+                                             captcha_data).read().decode('utf-8'))['success']
