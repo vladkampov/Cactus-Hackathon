@@ -41,7 +41,8 @@ module.exports = function(grunt) {
             'node_modules/webcamjs/webcam.min.js',
             'static/src/js/adapter.js',
             'static/src/js/kurento-client.js',
-            'static/src/js/kurento-utils.js'
+            'static/src/js/kurento-utils.js',
+            'static/src/js/recaptcha.js'
           ],
           'static/css/libs.css': ['node_modules/bootstrap/dist/css/bootstrap.min.css']
         }
